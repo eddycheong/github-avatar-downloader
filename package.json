@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/eddycheong/github-avatar-downloader.git"
   },
-  "keywords": [],
+  "keywords": ["github", "avatar"],
   "author": "",
   "license": "ISC",
   "bugs": {
