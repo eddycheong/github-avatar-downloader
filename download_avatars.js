@@ -1,7 +1,5 @@
 require('dotenv').config();
 
-process.exit(1);
-
 var request = require("request");
 var fs = require("fs");
 
