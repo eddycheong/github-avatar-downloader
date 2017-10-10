@@ -4,6 +4,11 @@ var fs = require("fs");
 var GITHUB_USER = "eddycheong";
 var GITHUB_TOKEN = "c869d3e73d0befab413cdf22ff0676d78f9e52ba";
 
+var args = process.argv.slice(2);
+var repoOwner = args[0];
+var repoName = args[1];
+
+
 function getRepoContributors(repoOwner, repoName, cb) {
   var requestURL = `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`;
 
@@ -20,7 +25,7 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
-getRepoContributors("jquery", "jquery", function(err, contributors) {
+getRepoContributors(repoOwner, repoName, function(err, contributors) {
   console.log("Errors:", err);
 
   contributors.forEach(function(contributor) {
