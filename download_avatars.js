@@ -53,7 +53,6 @@ if(args.length < 2) {
   process.exit(1);
 }
 
-var args = process.argv.slice(2);
 var repoOwner = args[0];
 var repoName = args[1];
 
@@ -61,8 +60,13 @@ getRepoContributors(repoOwner, repoName, function(err, contributors) {
   console.log("Errors:", err);
 
   contributors.forEach(function(contributor) {
+    var avatarFolder = './avatars/';
     var url = contributor['avatar_url'];
-    var filePath = './avatars/' + contributor['login'];
+    var filePath = avatarFolder + contributor['login'];
+
+    if(!fs.existsSync(avatarFolder)) {
+      fs.mkdirSync(avatarFolder);
+    }
 
     downloadImageByURL(url, filePath);
   });
