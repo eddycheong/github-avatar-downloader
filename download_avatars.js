@@ -1,8 +1,12 @@
+require('dotenv').config();
+
+process.exit(1);
+
 var request = require("request");
 var fs = require("fs");
 
-var GITHUB_USER = "eddycheong";
-var GITHUB_TOKEN = "c869d3e73d0befab413cdf22ff0676d78f9e52ba";
+var GITHUB_USER = process.env.GITHUB_USER;
+var GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 function printUsage(programName, args) {
   console.log('Usage: node ' + programName + " " + args.join(" "));
