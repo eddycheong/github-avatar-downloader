@@ -42,7 +42,6 @@ function downloadImageByURL(url, filePath) {
     });
 }
 
-
 // Start of program
 var args = process.argv.slice(2);
 
@@ -50,7 +49,7 @@ var programFullName = process.argv[1];
 var programFullNamePath = programFullName.split('/');
 var programName = programFullNamePath[programFullNamePath.length - 1];
 
-if(args.length < 2) {
+if(args.length !== 2) {
   printUsage(programName, ['<owner>', '<name>']);
   process.exit(1);
 }
