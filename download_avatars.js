@@ -24,17 +24,20 @@ getRepoContributors("jquery", "jquery", function(err, contributors) {
   console.log("Errors:", err);
 
   contributors.forEach(function(contributor) {
-    console.log("Result:", contributor['avatar_url']);
+    var url = contributor['avatar_url'];
+    var filePath = './avatars/' + contributor['login'];
+
+    downloadImageByURL(url, filePath);
   });
 });
 
 function downloadImageByURL(url, filePath) {
+
   request.get(url)
     .on('error', function(err) {
-      console.log(err)
+      throw err;
+    })
+    .on('end', function() {
     })
     .pipe(fs.createWriteStream(filePath)); // Assumes directory path exist
 }
-
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466",
-  "avatars/kvirani.jpg");
