@@ -4,9 +4,9 @@ var fs = require("fs");
 var GITHUB_USER = "eddycheong";
 var GITHUB_TOKEN = "c869d3e73d0befab413cdf22ff0676d78f9e52ba";
 
-var args = process.argv.slice(2);
-var repoOwner = args[0];
-var repoName = args[1];
+function printUsage(programName, args) {
+  console.log('Usage: node ' + programName + " " + args.join(" "));
+}
 
 function getRepoContributors(repoOwner, repoName, cb) {
   var requestURL = `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`;
@@ -24,17 +24,6 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
-getRepoContributors(repoOwner, repoName, function(err, contributors) {
-  console.log("Errors:", err);
-
-  contributors.forEach(function(contributor) {
-    var url = contributor['avatar_url'];
-    var filePath = './avatars/' + contributor['login'];
-
-    downloadImageByURL(url, filePath);
-  });
-});
-
 function downloadImageByURL(url, filePath) {
 
   var ext;
@@ -45,8 +34,36 @@ function downloadImageByURL(url, filePath) {
     .on('response', function(response) {
       ext = response.headers['content-type'].split('/')[1];
     })
-    .pipe(fs.createWriteStream(filePath))  // Assumes directory path exist
+    .pipe(fs.createWriteStream(filePath))
     .on('finish', function() {
       fs.rename(filePath, filePath + "." + ext);
     });
 }
+
+
+// Start of program
+var args = process.argv.slice(2);
+
+var programFullName = process.argv[1];
+var programFullNamePath = programFullName.split('/');
+var programName = programFullNamePath[programFullNamePath.length - 1];
+
+if(args.length < 2) {
+  printUsage(programName, ['<owner>', '<name>']);
+  process.exit(1);
+}
+
+var args = process.argv.slice(2);
+var repoOwner = args[0];
+var repoName = args[1];
+
+getRepoContributors(repoOwner, repoName, function(err, contributors) {
+  console.log("Errors:", err);
+
+  contributors.forEach(function(contributor) {
+    var url = contributor['avatar_url'];
+    var filePath = './avatars/' + contributor['login'];
+
+    downloadImageByURL(url, filePath);
+  });
+});
