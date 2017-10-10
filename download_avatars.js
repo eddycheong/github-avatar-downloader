@@ -8,7 +8,6 @@ var args = process.argv.slice(2);
 var repoOwner = args[0];
 var repoName = args[1];
 
-
 function getRepoContributors(repoOwner, repoName, cb) {
   var requestURL = `https://${GITHUB_USER}:${GITHUB_TOKEN}@api.github.com/repos/${repoOwner}/${repoName}/contributors`;
 
@@ -38,11 +37,16 @@ getRepoContributors(repoOwner, repoName, function(err, contributors) {
 
 function downloadImageByURL(url, filePath) {
 
+  var ext;
   request.get(url)
     .on('error', function(err) {
       throw err;
     })
-    .on('end', function() {
+    .on('response', function(response) {
+      ext = response.headers['content-type'].split('/')[1];
     })
-    .pipe(fs.createWriteStream(filePath)); // Assumes directory path exist
+    .pipe(fs.createWriteStream(filePath))  // Assumes directory path exist
+    .on('finish', function() {
+      fs.rename(filePath, filePath + "." + ext);
+    });
 }
